@@ -43,7 +43,7 @@ public class CabinetController : MonoBehaviour
 
     private void CabinetHandleCheck(SelectEnterEventArgs arg0)
     {
-        var hasKey = InventoryController.OnCheckInventory.Invoke(InventoryItem.ItemType.key, arg0.interactableObject.transform.gameObject);
+        var hasKey = InventoryManager.Instance.InventoryController.CheckInventory(BaseInventoryItem.ItemType.key, arg0.interactableObject.transform.gameObject);
         if (hasKey || isUnlocked)
         {
             Debug.Log("Door Open");

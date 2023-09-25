@@ -362,7 +362,7 @@ namespace UnityEngine.XR.Content.Interaction
             }
 
             if (m_Handle != null)
-                m_Handle.localEulerAngles = new Vector3(0.0f, 90.0f, angle);
+                m_Handle.localEulerAngles = new Vector3(angle, 0.0f, 0.0f);
         }
 
         void SetValue(float value)

@@ -6,58 +6,65 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class InventoryController : MonoBehaviour
+public class InventoryController : IDisposable
 {
-    [SerializeField] private GameObject InventoryUIPanel;
-    [SerializeField] private GameObject InventoryImagePanel;
+    public event Action<GameObject> OnPickUpItem;
+    public event Func<BaseInventoryItem.ItemType, GameObject, bool> OnCheckInventory;
 
-    public List<InventoryItem> inventoryItems;
+    private InventoryManager inventoryManager;
 
-    public delegate void GainInventoryItem(GameObject item);
-    public static GainInventoryItem OnAddInventoryItem;
+    public TextMeshPro textMesh;
 
-    public delegate bool CheckInventoryHandler(InventoryItem.ItemType itemType, GameObject item);
-    public static CheckInventoryHandler OnCheckInventory;
-
-    private void OnEnable()
+    public InventoryController(InventoryManager invManager)
     {
-        OnAddInventoryItem += AddItem;
-        OnCheckInventory += CheckForItem;
-
+        inventoryManager = invManager;
+        Debug.Log("Created");
+        OnPickUpItem += HandleItemPickup;
+        OnCheckInventory += CheckForItemInInventory;
     }
-    private void OnDisable()
+
+    //When an inventory item is hovered, update the UI
+    public void ShowText(Transform transform, Vector3 position)
     {
-        OnAddInventoryItem -= AddItem;
-        OnCheckInventory -= CheckForItem;
-
+        textMesh.text = transform.name;
+        textMesh.transform.position = position;
+        textMesh.gameObject.SetActive(true);
     }
-    private void AddItem(GameObject arg0)
+
+    public void HideText()
+    {
+        textMesh.gameObject.SetActive(false);
+    }
+
+    //When an inventory item is picked up, add it to the inventory list
+    internal void ItemPickedUp(GameObject gameObject)
+    {
+        OnPickUpItem?.Invoke(gameObject);
+    }
+
+    private void HandleItemPickup(GameObject arg0)
     {
         var grabbedItem = arg0.gameObject;
         Debug.Log($"{grabbedItem.name} added to inventory ");
 
-        inventoryItems.Add(grabbedItem.GetComponent<InventoryItem>());
-
-        //var itemimg = Instantiate(InventoryImagePanel, InventoryUIPanel.transform);
-        //grabbedItem.transform.SetParent(itemimg.transform);
-        //grabbedItem.transform.localPosition = Vector3.zero;
-        //grabbedItem.transform.rotation = Quaternion.Euler(new Vector3(40, 90, 0));
-
-        //itemimg.GetComponentInChildren<TextMeshProUGUI>().text = $"{grabbedItem.name}";
-        //itemimg.GetComponentInChildren<Button>().onClick.AddListener(delegate { GrabItem(grabbedItem); });
+        inventoryManager.inventoryItems.Add(grabbedItem.GetComponent<BaseInventoryItem>());
     }
 
-    //private void GrabItem(GameObject item)
-    //{
-    //    Debug.Log("Button Select");
-    //    item.SetActive(true);
-    //}
-
-    private bool CheckForItem(InventoryItem.ItemType itemType, GameObject item)
+    internal bool CheckInventory(BaseInventoryItem.ItemType itemType, GameObject item)
     {
-        bool isPresent = inventoryItems.Exists(item => item.itemType == itemType);
+        return OnCheckInventory.Invoke(itemType, item);
+    }
+    private bool CheckForItemInInventory(BaseInventoryItem.ItemType itemType, GameObject item)
+    {
+        bool isPresent = inventoryManager.inventoryItems.Exists(item => item.itemType == itemType);
         string presentStatus = isPresent ? "is present" : "is not present";
         Debug.Log($"{item.name} {presentStatus} in InventoryList");
         return isPresent;
+    }
+
+    public void Dispose()
+    {
+        OnPickUpItem -= HandleItemPickup;
+        OnCheckInventory -= CheckForItemInInventory;
     }
 }

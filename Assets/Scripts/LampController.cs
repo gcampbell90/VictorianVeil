@@ -28,15 +28,15 @@ public class LampController : MonoBehaviour
 
     private void CheckIsValid(SelectEnterEventArgs arg0)
     {
-        var type = arg0.interactableObject.transform.TryGetComponent(out InventoryItem inventoryItem);
+        var type = arg0.interactableObject.transform.TryGetComponent(out BaseInventoryItem inventoryItem);
         if (!type)
         {
             Debug.Log("Not a valid itemObject");
         }
         else
         {
-            InventoryItem.ItemType itemType = arg0.interactableObject.transform.GetComponent<InventoryItem>().itemType;
-            var hasKey = InventoryController.OnCheckInventory.Invoke(itemType, arg0.interactableObject.transform.gameObject);
+            BaseInventoryItem.ItemType itemType = arg0.interactableObject.transform.GetComponent<BaseInventoryItem>().itemType;
+            var hasKey = InventoryManager.Instance.InventoryController.CheckInventory(itemType, arg0.interactableObject.transform.gameObject);
             if (true)
             {
                 TriggerBustMovement();
@@ -65,7 +65,7 @@ public class LampController : MonoBehaviour
     }
     void OnDrawGizmos()
     {
-        Vector3 worldEndPosition = bustGO.transform.position + bustGO.transform.right * pos_Offset;
+        Vector3 worldEndPosition = bustGO.transform.position + -bustGO.transform.forward * pos_Offset;
 
         // Draw a yellow sphere at the transform's position
         //Debug.Log("DrawingGizmo");

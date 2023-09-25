@@ -187,8 +187,8 @@ public class FireplaceController : MonoBehaviour
         }
         else
         {
-            InventoryItem.ItemType itemType = arg0.interactableObject.transform.GetComponent<InventoryItem>().itemType;
-            var hasKey = InventoryController.OnCheckInventory.Invoke(itemType, arg0.interactableObject.transform.gameObject);
+            BaseInventoryItem.ItemType itemType = arg0.interactableObject.transform.GetComponent<BaseInventoryItem>().itemType;
+            var hasKey =  InventoryManager.Instance.InventoryController.CheckInventory(itemType, arg0.interactableObject.transform.gameObject);
 
 
             //TODO, update check items method to check inventory item before attaching to socket
