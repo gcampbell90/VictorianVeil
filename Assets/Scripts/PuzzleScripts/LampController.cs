@@ -28,14 +28,14 @@ public class LampController : MonoBehaviour
 
     private void CheckIsValid(SelectEnterEventArgs arg0)
     {
-        var type = arg0.interactableObject.transform.TryGetComponent(out BaseInventoryItem inventoryItem);
+        var type = arg0.interactableObject.transform.TryGetComponent(out BaseItem inventoryItem);
         if (!type)
         {
             Debug.Log("Not a valid itemObject");
         }
         else
         {
-            BaseInventoryItem.ItemType itemType = arg0.interactableObject.transform.GetComponent<BaseInventoryItem>().itemType;
+            BaseItem.ItemType itemType = arg0.interactableObject.transform.GetComponent<BaseItem>().itemType;
             var hasKey = InventoryManager.Instance.InventoryController.CheckInventory(itemType, arg0.interactableObject.transform.gameObject);
             if (true)
             {

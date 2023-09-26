@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 6065976545994470752}
   - component: {fileID: 1029107435937289514}
   - component: {fileID: 1378827577225384337}
-  - component: {fileID: 428019251138317484}
+  - component: {fileID: 7610120734667854476}
   m_Layer: 0
   m_Name: AztecPiece
   m_TagString: Untagged
@@ -521,8 +521,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemType: 0
+  _textPos: {x: 0, y: 0, z: 0}
   _debugPos: {fileID: 0}
---- !u!65 &428019251138317484
+--- !u!65 &7610120734667854476
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -541,7 +542,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 0.29535487, z: 1}
+  m_Size: {x: 0.2, y: 0.1, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7858576256475710053
 GameObject:

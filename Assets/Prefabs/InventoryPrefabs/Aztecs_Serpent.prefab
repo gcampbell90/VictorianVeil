@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 228466469333830233}
   - component: {fileID: 6155340439645884678}
   - component: {fileID: 2786928750930364320}
-  - component: {fileID: 5842068794437509400}
+  - component: {fileID: 1066987109906653713}
   - component: {fileID: 7093739047089448957}
+  - component: {fileID: 3149825010192961432}
   m_Layer: 0
   m_Name: Aztecs_Serpent
   m_TagString: Untagged
@@ -29,9 +30,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8549300995722637080}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7071068, z: 0.7071068, w: 0}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0.7071068, w: 0}
   m_LocalPosition: {x: -0.383, y: 0.5, z: 0}
-  m_LocalScale: {x: 0.046734728, y: 0.0467347, z: 0.0467347}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1559834858197209740}
@@ -114,7 +115,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &5842068794437509400
+--- !u!65 &1066987109906653713
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -133,8 +134,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.4476154, y: 2.4476147, z: 0.19007649}
-  m_Center: {x: 0, y: -0.000000022658538, z: 0.095036805}
+  m_Size: {x: 0.16351987, y: 0.012698558, z: 0.16351987}
+  m_Center: {x: 0, y: 0.0063492055, z: 0}
 --- !u!114 &7093739047089448957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -283,6 +284,21 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
+--- !u!114 &3149825010192961432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8549300995722637080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44cb831b00075104aa41285a2872a174, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemType: 0
+  _textPos: {x: 0, y: 0, z: 0}
+  _debugPos: {fileID: 0}
 --- !u!1 &8600464996701658570
 GameObject:
   m_ObjectHideFlags: 0

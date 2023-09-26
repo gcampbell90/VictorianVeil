@@ -187,7 +187,7 @@ public class FireplaceController : MonoBehaviour
         }
         else
         {
-            BaseInventoryItem.ItemType itemType = arg0.interactableObject.transform.GetComponent<BaseInventoryItem>().itemType;
+            BaseItem.ItemType itemType = arg0.interactableObject.transform.GetComponent<BaseItem>().itemType;
             var hasKey =  InventoryManager.Instance.InventoryController.CheckInventory(itemType, arg0.interactableObject.transform.gameObject);
 
 
