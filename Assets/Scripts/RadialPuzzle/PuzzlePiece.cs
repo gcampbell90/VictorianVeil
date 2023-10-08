@@ -25,7 +25,7 @@ public class PuzzlePiece : MonoBehaviour
     {
         //Ignore interactors
         if (other.name == "Pusher" || other.name == "Direct Interactor") return;
-        Debug.Log($"{transform.name}: Route {other.name}");
+        //Debug.Log($"{transform.name}: Route {other.name}");
   
         waypointInteractable = GetComponent<WaypointInteractable>();
         //reset Curr node if present

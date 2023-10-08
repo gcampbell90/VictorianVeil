@@ -10,7 +10,7 @@ public class FuseboxController : MonoBehaviour
     [SerializeField] private XRLever xrLever;
     [SerializeField] private ParticleSystem sparks;
     [SerializeField] private XRSocketInteractor fuseSocket;
-    [SerializeField] private XRBaseInteractable socketedInteractor;
+    private XRBaseInteractable _currSocketedInteractor;
 
     private enum FuseState { Broken, Empty, Fixed }
     private FuseState fuseState;
@@ -27,10 +27,10 @@ public class FuseboxController : MonoBehaviour
         fuseSocket.selectExited.AddListener((args) => fuseState = FuseState.Empty);
 
         xrLever.onLeverActivate.AddListener(() => HandleNewState(true, activatePFX));
-        xrLever.onLeverActivate.AddListener(() => ToggleInteractionLayer(socketedInteractor, false));
+        xrLever.onLeverActivate.AddListener(() => ToggleInteractionLayer(_currSocketedInteractor, false));
 
         xrLever.onLeverDeactivate.AddListener(() => HandleNewState(false, deactivatePFX));
-        xrLever.onLeverDeactivate.AddListener(() => ToggleInteractionLayer(socketedInteractor, true));
+        xrLever.onLeverDeactivate.AddListener(() => ToggleInteractionLayer(_currSocketedInteractor, true));
 
     }
 
@@ -38,7 +38,7 @@ public class FuseboxController : MonoBehaviour
     {
         var name = arg0.interactableObject.transform.name;
         //Debug.Log(name);
-        socketedInteractor = (XRBaseInteractable)arg0.interactableObject;
+        _currSocketedInteractor = (XRBaseInteractable)arg0.interactableObject;
         if (name == "BrokenFuse")
         {
             if (fuseState == FuseState.Fixed || fuseState == FuseState.Empty)
@@ -85,14 +85,14 @@ public class FuseboxController : MonoBehaviour
     {
         //GameController.Instance.transform.GetComponent<Lightmap_Switcher>().DayLight();
         //GameController.Instance.LoadLightOnProbes();
-        RoomController.Instance.SwitchOnLights();
+        //RoomController.Instance.SwitchOnLights();
         DeinitialiseFusebox();
     }
 
     private void DeinitialiseFusebox()
     {
         sparks.Stop();
-        ToggleInteractionLayer(socketedInteractor, false);
+        ToggleInteractionLayer(_currSocketedInteractor, false);
         xrLever.enabled = false;
     }
 

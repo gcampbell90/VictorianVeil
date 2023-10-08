@@ -3,96 +3,150 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.XR.Interaction.Toolkit;
 
-public class InventoryView : MonoBehaviour
+namespace InventorySystem
 {
-
-    [SerializeField] private GameObject _textMesh;
-    private ItemTextMesh _itemTextMesh;
-
-    [SerializeField] private GameObject _itemImagePrefab;
-    [SerializeField] private RectTransform _itemPanel;
-
-    private Dictionary<InventoryObject, GameObject> _inventoryButtons = new Dictionary<InventoryObject, GameObject>();
-
-    public void Awake()
+    public class InventoryView : MonoBehaviour
     {
-        SetUpUIText();
-    }
+        [Header("Debug UI Prefabs")]
+        [SerializeField] private RectTransform _itemPanel;
+        [SerializeField] private GameObject _itemImagePrefab;
 
-    private void OnEnable()
-    {
-        InventoryManager.Instance.OnItemSelected += ShowItemText;
-        InventoryManager.Instance.OnItemAdded += HandleItemAdded;
-        InventoryManager.Instance.OnItemRemoved += HandleItemRemoved;
-    }
+        [SerializeField] private GameObject _textMesh;
 
-    private void OnDisable()
-    {
-        InventoryManager.Instance.OnItemSelected -= ShowItemText;
-        InventoryManager.Instance.OnItemAdded -= HandleItemAdded;
-        InventoryManager.Instance.OnItemRemoved -= HandleItemRemoved;
-    }
+        [Header("3D UI")]
+        [SerializeField] private ItemUIPanel _itemUIPanel;
+        [SerializeField] private GameObject _itemUIPrefab;
 
-    private void SetUpUIText()
-    {
-        //Create UI text mesh
-        var m_textMesh = Instantiate(_textMesh);
-        _itemTextMesh = m_textMesh.GetComponent<ItemTextMesh>();
-    }
+        private ItemTextMesh _itemTextMesh;
+        private Dictionary<InventoryObject, GameObject> _inventory3DButtons = new Dictionary<InventoryObject, GameObject>();
 
-    private void ShowItemText(InventoryObject item)
-    {
-        _itemTextMesh.SetItemText(item);
-    }
+        // Events to notify the InventoryView
+        public delegate void ShowItemTextDelegate(InventoryObject item);
+        public event ShowItemTextDelegate OnShowItemText;
 
-    private void HideItemText()
-    {
-        _itemTextMesh.HideText();
-    }
+        public delegate void HideItemTextDelegate(InventoryObject item);
+        public event HideItemTextDelegate OnHideItemText;
 
-    private void HandleItemAdded(InventoryObject item)
-    {
-        HideItemText();
-        AddItemToInventoryPanel(item);
-    }
+        public delegate void ShowItemAddedDelegate(InventoryObject item);
+        public event ShowItemAddedDelegate OnAddItem;
 
-    private void AddItemToInventoryPanel(InventoryObject item)
-    {
-        if (_itemPanel != null)
+        public delegate void ShowItemRemovedDelegate(InventoryUIItem item);
+        public event ShowItemRemovedDelegate OnRemoveItem;
+
+        public delegate void UIItemSelectedDelegate(InventoryUIItem item, SelectEnterEventArgs args);
+        public event UIItemSelectedDelegate OnUIItemSelected;
+
+        public void Awake()
         {
-            var itemObject = Instantiate(_itemImagePrefab, _itemPanel);
-            itemObject.GetComponentInChildren<TextMeshProUGUI>().text = item.ItemName;
-            Button itemButton = itemObject.GetComponent<Button>();
+            SetUpUIText();
+        }
 
-            if (itemButton != null)
+        private void OnEnable()
+        {
+            OnShowItemText += HandleShowItemText;
+            OnHideItemText += HandleHideItemText;
+            OnAddItem += HandleItemAdded;
+            OnRemoveItem += HandleItemRemoved;
+        }
+
+        private void OnDisable()
+        {
+            OnShowItemText -= HandleShowItemText;
+            OnHideItemText -= HandleHideItemText;
+            OnAddItem -= HandleItemAdded;
+            OnRemoveItem -= HandleItemRemoved;
+        }
+
+        private void SetUpUIText()
+        {
+            //Create UI text mesh
+            var m_textMesh = Instantiate(_textMesh);
+            _itemTextMesh = m_textMesh.GetComponent<ItemTextMesh>();
+        }
+
+        //Public methods for calling events
+        public void ShowItemText(InventoryObject item)
+        {
+            OnShowItemText?.Invoke(item);
+        }
+
+        public void HideItemText(InventoryObject item)
+        {
+            OnHideItemText?.Invoke(item);
+        }
+
+        public void AddItemToInventory(InventoryObject item)
+        {
+            OnAddItem?.Invoke(item);
+        }
+
+        public void RemoveItemFromInventory(InventoryUIItem item)
+        {
+            OnRemoveItem?.Invoke(item);
+        }
+
+        //Private methods for logic
+        private void HandleShowItemText(InventoryObject item)
+        {
+            _itemTextMesh.SetItemText(item);
+        }
+
+        private void HandleHideItemText(InventoryObject item)
+        {
+            _itemTextMesh.HideText();
+        }
+
+        private void HandleItemAdded(InventoryObject item)
+        {
+            OnHideItemText?.Invoke(item);
+            AddItemToInventoryPanel(item);
+        }
+
+        private void HandleItemRemoved(InventoryUIItem uiItem)
+        {
+            var m_inventoryObject = uiItem.InventoryObject;
+            if (_inventory3DButtons.ContainsKey(m_inventoryObject))
             {
-                itemButton.onClick.AddListener(() => HandleItemButtonClicked(item));
+                var uiButton = _inventory3DButtons[m_inventoryObject];
+
+                uiButton.GetComponent<InventoryUIItem>().onItemSelected -= HandleUIItemSelected;
+
+                _inventory3DButtons.Remove(m_inventoryObject);
+                _itemUIPanel.Remove(uiItem);
+
+                Destroy(uiButton);
             }
-
-            _inventoryButtons.Add(item, itemObject);
         }
-        else
+
+        private void AddItemToInventoryPanel(InventoryObject item)
         {
-            Debug.LogError("ItemPanel reference is missing in InventoryView!");
+            if (_itemUIPanel != null)
+            {
+                ItemSlot m_ItemSlot = _itemUIPanel.GetItemSlot();
+
+                var itemObject = Instantiate(_itemUIPrefab, _itemUIPanel.transform);
+                itemObject.transform.localPosition = m_ItemSlot.Position;
+
+                itemObject.GetComponentInChildren<TextMeshPro>().text = item.ItemName;
+
+                var uiItem = itemObject.GetComponent<InventoryUIItem>();
+                uiItem.UISlotIndex = m_ItemSlot.Index;
+                uiItem.InventoryObject = item;
+                uiItem.onItemSelected += HandleUIItemSelected;
+
+                _inventory3DButtons.Add(item, itemObject);
+            }
+            else
+            {
+                Debug.LogError("ItemPanel reference is missing in InventoryView!");
+            }
         }
-    }
 
-    private void HandleItemButtonClicked(InventoryObject item)
-    {
-        InventoryManager.Instance.ReactivateItem(item);
-    }
-
-    private void HandleItemRemoved(InventoryObject item)
-    {
-        if (_inventoryButtons.ContainsKey(item))
+        private void HandleUIItemSelected(InventoryUIItem item, SelectEnterEventArgs args)
         {
-            var go = _inventoryButtons[item];
-
-            _inventoryButtons.Remove(item);
-
-            Destroy(go);
+            OnUIItemSelected?.Invoke(item, args);
         }
     }
-
 }

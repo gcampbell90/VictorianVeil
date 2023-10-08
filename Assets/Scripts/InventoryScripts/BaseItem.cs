@@ -2,42 +2,45 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public abstract class BaseItem : MonoBehaviour, IInventoryItem
+public abstract class BaseItem : MonoBehaviour
 {
     [SerializeField] private string _itemName;
-    public string ItemName { get => _itemName; private set => _itemName = value; }
-    public XRBaseInteractable Item { get; private set; }
+    public string ItemName { get => _itemName; set => _itemName = value; }
+    public XRBaseInteractable BaseInteractable { get; private set; }
     private Rigidbody _rb;
 
     public enum ItemType { key, other };
     public ItemType itemType;
 
-    public Vector3 TextPos { get => _textPos; }
+    public Vector3 TextPos { get => _textPos; set => _textPos = value; }
     [SerializeField] private Vector3 _textPos;
+
 
     public virtual void Awake()
     {
-        Item = GetComponent<XRGrabInteractable>();
+        BaseInteractable = GetComponent<XRGrabInteractable>();
         _rb = transform.GetComponent<Rigidbody>();
 
-        if (_itemName == "")
+        if (_itemName == null || _itemName == "")
         {
             _itemName = transform.name;
         }
+
+        //Debug.Log($"After setting in base: {_itemName}");
     }
 
     public virtual void OnEnable()
     {
-        Item.hoverEntered.AddListener(HoverEntered);
-        Item.selectEntered.AddListener(SelectEntered);
-        Item.selectExited.AddListener(SelectExited);
+        BaseInteractable.hoverEntered.AddListener(HoverEntered);
+        BaseInteractable.selectEntered.AddListener(SelectEntered);
+        BaseInteractable.selectExited.AddListener(SelectExited);
     }
 
     public virtual void OnDisable()
     {
-        Item.hoverEntered.RemoveListener(HoverEntered);
-        Item.selectEntered.RemoveListener(SelectEntered);
-        Item.selectExited.RemoveListener(SelectExited);
+        BaseInteractable.hoverEntered.RemoveListener(HoverEntered);
+        BaseInteractable.selectEntered.RemoveListener(SelectEntered);
+        BaseInteractable.selectExited.RemoveListener(SelectExited);
     }
 
     public virtual void HoverEntered(HoverEnterEventArgs args)
@@ -47,7 +50,6 @@ public abstract class BaseItem : MonoBehaviour, IInventoryItem
 
     public virtual void SelectEntered(SelectEnterEventArgs args)
     {
-        Item.selectEntered.RemoveListener(SelectEntered);
         Debug.Log($"Item  '{args.interactableObject.transform.name}' Selected by '{args.interactorObject.transform.name}'");
     }
 
@@ -56,8 +58,4 @@ public abstract class BaseItem : MonoBehaviour, IInventoryItem
         Debug.Log($"Item  '{args.interactableObject.transform.name}' select exited by '{args.interactorObject.transform.name}'");
     }
 
-    void OnDrawGizmos()
-    {
-        Gizmos.DrawCube(TextPos, Vector3.one * 0.01f);
-    }
 }

@@ -46,10 +46,16 @@ public class FireplaceController : MonoBehaviour
 
     private void Awake()
     {
+        if (GameManager.Instance.GetDebugMode())
+        {
+            activateFireplacePuzzle = true;
+        }
+
         aztecCircleSocket = circleSocketGO.GetComponent<XRSocketInteractor>();
         keySocket = keySocketGO.GetComponent<XRSocketInteractor>();
         keyHoleSlider = keyHoleSocketCoverGO.GetComponent<XRSlideable>();
     }
+
     private void OnEnable()
     {
         aztecCircleSocket.selectEntered.AddListener((args) => CheckIsValid(args, aztecCircleSocket));
@@ -67,6 +73,7 @@ public class FireplaceController : MonoBehaviour
             pushButton.onPress.AddListener(delegate { ButtonPress(pushButton); });
         }
     }
+
     private void OnDisable()
     {
         aztecCircleSocket.selectEntered.RemoveListener((args) => CheckIsValid(args, aztecCircleSocket));
@@ -83,6 +90,7 @@ public class FireplaceController : MonoBehaviour
             pushButton.onPress.RemoveListener(delegate { ButtonPress(pushButton); });
         }
     }
+
     private void Start()
     {
         ToggleSlot(keySocket, false);
@@ -120,6 +128,7 @@ public class FireplaceController : MonoBehaviour
         Debug.Log(pushButton.name);
         TrackButtons(pushButton);
     }
+
     private void TrackButtons(XRPushButton pushButton)
     {
         inputCombo.Add(pushButton);
@@ -127,6 +136,7 @@ public class FireplaceController : MonoBehaviour
         // Optionally: Check the password after each key selection
         CheckButtonCombo();
     }
+
     private void CheckButtonCombo()
     {
         // If the input sequence is longer than the password, clear the input
@@ -154,6 +164,7 @@ public class FireplaceController : MonoBehaviour
             onCodeEntered?.Invoke();
         }
     }
+
     private void ResetInputCombo()
     {
         inputCombo.Clear();
@@ -166,6 +177,7 @@ public class FireplaceController : MonoBehaviour
         RevealCoin();
         GetComponent<CrystalController>().Finish();
     }
+
     private void RevealCoin()
     {
         Instantiate(coinPrefab, coinPosition.position, coinPosition.rotation);
@@ -177,34 +189,21 @@ public class FireplaceController : MonoBehaviour
         Destroy(keyHoleSlider.gameObject.GetComponent<Collider>());
         Destroy(keyHoleSlider.gameObject.GetComponent<Rigidbody>());
     }
+
     private void CheckIsValid(SelectEnterEventArgs arg0, XRSocketInteractor socket)
     {
-        var type = arg0.interactableObject.transform.TryGetComponent(out InventoryObject inventoryObject);
-        //Debug.Log($"Interactor Obj {arg0.interactorObject}");
-        if (!type)
-        {
-            Debug.Log("Not a valid itemObject");
-        }
-        else
-        {
-            BaseItem.ItemType itemType = arg0.interactableObject.transform.GetComponent<BaseItem>().itemType;
-            var hasKey =  InventoryManager.Instance.InventoryController.CheckInventory(itemType, arg0.interactableObject.transform.gameObject);
-
-
-            //TODO, update check items method to check inventory item before attaching to socket
-            if (true)
-            {
-                StartCoroutine(SwitchInteractableAfterDelay(arg0, socket));
-            }
-        }
+        StartCoroutine(SwitchInteractableAfterDelay(arg0, socket));
     }
+
     private IEnumerator SwitchInteractableAfterDelay(SelectEnterEventArgs arg0, XRSocketInteractor socket)
     {
         var interactable = arg0.interactableObject.transform.GetComponent<XRGrabInteractable>();
         interactable.interactionLayers = ToggleInteractionLayer(interactable.interactionLayers, false);
+
         StartCoroutine(DeactivateSocketAfterDelay(socket));
 
         yield return new WaitForSeconds(1f);
+        socket.socketActive = false;
         interactable.interactionLayers = ToggleInteractionLayer(interactable.interactionLayers, true);
 
         if (arg0.interactableObject.transform.name == "AztecPiece")
@@ -213,6 +212,7 @@ public class FireplaceController : MonoBehaviour
             //Debug.Log("Changing Interactions of AztecPiece");
         }
     }
+
     private IEnumerator DeactivateSocketAfterDelay(XRSocketInteractor socketInteractor)
     {
         yield return new WaitForSeconds(0.5f);
@@ -221,6 +221,7 @@ public class FireplaceController : MonoBehaviour
         //Debug.Log("Destroyed Socket");
 
     }
+
     private void ChangeToKnobInteractable(IXRSelectInteractable interactableObject)
     {
 
@@ -229,21 +230,27 @@ public class FireplaceController : MonoBehaviour
         Destroy(interactableObject.transform.GetComponent<XRGeneralGrabTransformer>());
         Destroy(interactableObject.transform.GetComponent<InventoryObject>());
 
-        var xrknob = interactableObject.transform.gameObject.GetComponent<UnityEngine.XR.Content.Interaction.XRKnob>();
+        var xrknob = interactableObject.transform.gameObject.GetComponent<XRKnob>();
+
+        var crystalController = transform.GetComponent<CrystalController>();
+        xrknob.onValueChange.AddListener(crystalController.RotateCrystal);
         xrknob.enabled = true;
     }
+
     private InteractionLayerMask ToggleInteractionLayer(InteractionLayerMask layerMask, bool isOn)
     {
         int layer = isOn ? 2 : 30;
         layerMask = 1 << layer;
         return layerMask;
     }
+
     private void ActivateFireplacePuzzle()
     {
         StartCoroutine(MoveSlotCover());
         GetComponent<CrystalController>().Init();
         ToggleSlot(aztecCircleSocket, true);
     }
+
     private IEnumerator MoveSlotCover()
     {
         float t = 0;
@@ -270,6 +277,7 @@ public class FireplaceController : MonoBehaviour
         }
         slotCover.localPosition = endPos;  // Ensure the final position is correct
     }
+
     private void ToggleSlot(XRSocketInteractor socket, bool isOn)
     {
         socket.socketActive = isOn;

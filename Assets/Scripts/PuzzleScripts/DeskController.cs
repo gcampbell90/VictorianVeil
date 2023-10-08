@@ -20,7 +20,7 @@ public class DeskController : MonoBehaviour
     }
     private void Start()
     {
-        if(RoomController.Instance.DebugMode || isUnlocked)
+        if (GameManager.Instance.GetDebugMode() || isUnlocked)
         {
             moveableDrawers[0].slideableItem.IsUnlocked = true;
             moveableDrawers[1].slideableItem.IsUnlocked = true;

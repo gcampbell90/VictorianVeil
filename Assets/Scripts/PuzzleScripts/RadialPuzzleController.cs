@@ -1,11 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.XR.Content.Interaction;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-using UnityEngine;
-using UnityEngine.XR.Content.Interaction;
 
 public class RadialPuzzleController : MonoBehaviour
 {
@@ -326,18 +326,18 @@ public class RadialPuzzleController : MonoBehaviour
             }
         }
 
-        if (WX_Route != null)
-        {
-            Gizmos.color = Color.gray;
-            for (int i = 0; i < WX_Route.Length; i++)
-            {
-                Gizmos.DrawWireSphere(WX_Route[i].position, 0.01f);
-                for (int j = 0; j < WX_Route[i].adjacentNodes.Count; j++)
-                {
-                    Gizmos.DrawLine(WX_Route[i].position, WX_Route[j].position);
-                }
-            }
-        }
+        //if (WX_Route != null)
+        //{
+        //    Gizmos.color = Color.gray;
+        //    for (int i = 0; i < WX_Route.Length; i++)
+        //    {
+        //        Gizmos.DrawWireSphere(WX_Route[i].position, 0.01f);
+        //        for (int j = 0; j < WX_Route[i].adjacentNodes.Count; j++)
+        //        {
+        //            Gizmos.DrawLine(WX_Route[i].position, WX_Route[j].position);
+        //        }
+        //    }
+        //}
 
         if (YZ_Route != null)
         {

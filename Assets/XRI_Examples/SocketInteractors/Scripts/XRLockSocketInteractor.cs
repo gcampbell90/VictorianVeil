@@ -9,7 +9,7 @@ namespace UnityEngine.XR.Content.Interaction
     {
         [Space]
         [SerializeField]
-        [Tooltip("The required keys to interact with this socket.")]
+        [Tooltip("The required keyobject to interact with this socket.")]
         Lock m_Lock;
 
         /// <summary>

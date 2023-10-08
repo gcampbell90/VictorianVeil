@@ -7,27 +7,33 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class TinderboxController : MonoBehaviour
 {
     [SerializeField] private GameObject key;
-    [SerializeField] private float openPosition;
-    private FireplaceKey fireplaceKey;
+    private FireplaceKey _fireplaceKey;
+    private CapsuleCollider _lidCollider;
 
     private void Awake()
     {
-        fireplaceKey = key.GetComponent<FireplaceKey>();
+        _lidCollider = transform.GetChild(1).GetComponent<CapsuleCollider>();
+        if (_lidCollider.enabled == true)
+        {
+            _lidCollider.enabled = false;
+        }
+
+        _fireplaceKey = key.GetComponent<FireplaceKey>();
     }
 
     private void OnEnable()
     {
-        fireplaceKey.XRSlideable.onMovementCompleted += UnlockBox;
+        _fireplaceKey.XRSlideable.onMovementCompleted += UnlockBox;
     }
 
     private void OnDisable()
     {
-        fireplaceKey.XRSlideable.onMovementCompleted -= UnlockBox;
+        _fireplaceKey.XRSlideable.onMovementCompleted -= UnlockBox;
     }
     private void UnlockBox()
     {
-        fireplaceKey.XRSlideable.onMovementCompleted -= UnlockBox;
-        transform.GetChild(2).GetComponent<BoxCollider>().enabled = true;
+        _fireplaceKey.XRSlideable.onMovementCompleted -= UnlockBox;
+        _lidCollider.enabled = true;
         Destroy(this);
     }
 }

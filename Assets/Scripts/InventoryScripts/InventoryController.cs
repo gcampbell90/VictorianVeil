@@ -1,62 +1,133 @@
 using System;
-using TMPro;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
-
-public class InventoryController : IDisposable
+namespace InventorySystem
 {
-    public event Func<InventoryObject.ItemType, GameObject, bool> OnCheckInventory;
-
-    //Item Events
-    public delegate void OnShowItemText(InventoryObject inventoryObject);
-    public OnShowItemText onShowItemText;
-
-    public delegate void OnItemAddToInventory(GameObject gameObject);
-    public OnItemAddToInventory onItemAddToInventory;
-
-    public InventoryController()
+    public class InventoryController : IDisposable
     {
-        OnCheckInventory += CheckForItemInInventory;
-        onShowItemText += ShowItemText;
-        onItemAddToInventory += ItemAddToInventory;
-    }
+        private InventoryModel _inventoryModel;
+        private InventoryView _inventoryView;
+        private XRInteractionManager _interactionManager = null;
 
-    //When an inventory item is hovered, update the UI
-    public void ShowItemText(InventoryObject item)
-    {
-        //OnShowText(name, transform, position);
-        InventoryManager.Instance.ItemGrabbed(item);
-    }
+        //Item Events to update view
+        public delegate void OnShowItemText(InventoryObject inventoryObject);
+        public OnShowItemText onShowItemText;
 
-    //When an inventory item pick up event is fired, add it to the inventory list
-    private void ItemAddToInventory(GameObject arg0)
-    {
-        var grabbedItem = arg0.gameObject;
+        public delegate void OnHideItemText(InventoryObject inventoryObject);
+        public OnHideItemText onHideItemText;
 
-        var inventoryItem = grabbedItem.GetComponent<InventoryObject>();
+        public delegate void OnItemAddToInventory(GameObject gameObject);
+        public OnItemAddToInventory onItemAddToInventory;
 
-        InventoryManager.Instance.AddItemToInventory(inventoryItem);
-        Debug.Log($"{grabbedItem.name} added to inventory ");
-    }
+        public delegate void OnItemAddToSocket(InventoryObject inventoryObject);
+        public OnItemAddToSocket onItemAddToSocket;
 
-    internal bool CheckInventory(BaseItem.ItemType itemType, GameObject item)
-    {
-        return OnCheckInventory.Invoke(itemType, item);
-    }
+        public void Initialise(InventoryModel inventoryModel, InventoryView inventoryView)
+        {
+            _inventoryModel = inventoryModel;
+            _inventoryView = inventoryView;
 
-    private bool CheckForItemInInventory(BaseItem.ItemType itemType, GameObject item)
-    {
-        //bool isPresent = InventoryManager.Instance.inventoryItems.Exists(item => item.itemType == itemType);
-        //string presentStatus = isPresent ? "is present" : "is not present";
-        //Debug.Log($"{item.name} {presentStatus} in InventoryList");
-        //return isPresent;
-        return true;
-    }
+            _inventoryModel.OnInventoryAdded += UpdateViewAddItemToInventory;
+            _inventoryModel.OnInventoryRemoved += UpdateViewRemovedItemFromInventory;
+            _inventoryView.OnUIItemSelected += GetItemFromInventory;
 
-    public void Dispose()
-    {
-        OnCheckInventory -= CheckForItemInInventory;
-        onShowItemText -= ShowItemText;
-        onItemAddToInventory -= ItemAddToInventory;
+            onShowItemText += UpdateViewShowText;
+            onHideItemText += UpdateViewHideText;
+            onItemAddToInventory += ItemAddToInventory;
+
+            onItemAddToSocket += ItemAddToSocket;
+        }
+
+        //When an inventory item is hovered, update the UI
+        public void UpdateViewShowText(InventoryObject item) => _inventoryView.ShowItemText(item);
+
+        public void UpdateViewHideText(InventoryObject item) => _inventoryView.HideItemText(item);
+
+        private void UpdateViewAddItemToInventory(InventoryObject item) => _inventoryView.AddItemToInventory(item);
+
+        private void UpdateViewRemovedItemFromInventory(InventoryUIItem item) => _inventoryView.RemoveItemFromInventory(item);
+
+        //When an inventory item pick up event is fired, add it to the inventory list
+        private void ItemAddToInventory(GameObject arg0)
+        {
+
+            var inventoryObject = arg0.GetComponent<InventoryObject>();
+
+            _inventoryModel.AddItemToInventory(inventoryObject);
+            arg0.SetActive(false);
+
+            Debug.Log($"{arg0.name} added to inventory ");
+        }
+
+        //When an inventory item is selected from the inventory panel, reactivate the hidden gameobject
+        private void GetItemFromInventory(InventoryUIItem item, SelectEnterEventArgs args)
+        {
+            var m_item = item.InventoryObject;
+            //GameManager.Instance.inventoryManager.ReactivateItem(item);
+            if (_inventoryModel.IsItemInInventory(m_item))
+            {
+                GameObject itemGO = _inventoryModel.GetInventoryObject(item);
+
+                if (args != null)
+                {
+                    //attach GO to hand again
+                    Debug.Log($"UI Item: {args.interactableObject.transform.name} selected by {args.interactorObject.transform.name}");
+                    var m_xRManager = args.manager;
+
+                    //get direct interactor
+                    var interactorSel = args.interactorObject;
+                    var directInteractor = interactorSel.transform.parent.GetComponentInChildren<XRDirectInteractor>();
+                    var m_XRGrab = itemGO.GetComponent<XRGrabInteractable>();
+                    itemGO.transform.position = directInteractor.transform.position;
+                    m_xRManager.SelectEnter((IXRSelectInteractor)directInteractor, m_XRGrab);
+                }
+
+                _inventoryModel.RemoveItemFromInventory(item);
+
+                //set active
+                itemGO.SetActive(true);
+            }
+        }
+
+        private void ItemAddToSocket(InventoryObject inventoryObject)
+        {
+            var m_baseInteractable = inventoryObject.BaseInteractable;
+
+            m_baseInteractable.hoverEntered.RemoveAllListeners();
+            m_baseInteractable.selectEntered.RemoveAllListeners();
+            m_baseInteractable.selectExited.RemoveAllListeners();
+
+            if (_interactionManager == null)
+            {
+                SetInteractionManager(m_baseInteractable);
+            }
+
+            var m_interactor = m_baseInteractable.interactorsSelecting[0];
+            _interactionManager.SelectExit(m_interactor, m_baseInteractable);
+
+            UpdateViewHideText(inventoryObject);
+            Debug.Log($"{inventoryObject.ItemName} entered into socket, removing listeners and deselecting");
+        }
+
+        void SetInteractionManager(XRBaseInteractable interactableObject)
+        {
+            _interactionManager = interactableObject.interactionManager;
+        }
+
+        public void Dispose()
+        {
+            _inventoryModel.OnInventoryAdded -= UpdateViewAddItemToInventory;
+            _inventoryModel.OnInventoryRemoved -= UpdateViewRemovedItemFromInventory;
+            _inventoryView.OnUIItemSelected -= GetItemFromInventory;
+
+            onShowItemText -= UpdateViewShowText;
+            onHideItemText -= UpdateViewHideText;
+
+            onItemAddToInventory -= ItemAddToInventory;
+
+            onItemAddToSocket -= ItemAddToSocket;
+
+        }
     }
 }

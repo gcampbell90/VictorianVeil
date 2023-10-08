@@ -6,20 +6,17 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/VictorianRoom.unity
-    guid: d36d70997ec68264a822910d9de20e7f
-  - enabled: 0
-    path: Assets/Scenes/LightOnProbes.unity
-    guid: 59b4917b5712cf240bfe6b0edc25f8b7
-  - enabled: 0
-    path: Assets/Scenes/LightOffProbes.unity
-    guid: 96dde30e796fb5f45a03268e40f8b866
-  - enabled: 1
     path: Assets/Scenes/XRRigScene.unity
     guid: 85d6a48f0aaab0c47b3b71dbf6bdc959
   - enabled: 1
     path: Assets/Scenes/InteractableItems.unity
     guid: 2d91434b8fd1d4b4788173bef69116c9
+  - enabled: 1
+    path: Assets/Scenes/Puzzles.unity
+    guid: 60c1a5c19b833fa49b3175f144daf861
+  - enabled: 1
+    path: Assets/Scenes/VictorianRoom.unity
+    guid: d36d70997ec68264a822910d9de20e7f
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: fc7a25e8ed0cc0a49ab2a36a3bc9aaa3,
       type: 2}

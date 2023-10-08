@@ -183,6 +183,7 @@ GameObject:
   - component: {fileID: 1029107435937289514}
   - component: {fileID: 1378827577225384337}
   - component: {fileID: 7610120734667854476}
+  - component: {fileID: 461043881420936927}
   m_Layer: 0
   m_Name: AztecPiece
   m_TagString: Untagged
@@ -198,9 +199,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5858205113508239089}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.197, y: 0.52, z: 0}
-  m_LocalScale: {x: 0.17010236, y: 0.17010236, z: 0.17010236}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 3553448895548657115}
@@ -520,8 +521,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44cb831b00075104aa41285a2872a174, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _itemName: 
   itemType: 0
-  _textPos: {x: 0, y: 0, z: 0}
+  _textPos: {x: 0, y: 0.15, z: 0}
   _debugPos: {fileID: 0}
 --- !u!65 &7610120734667854476
 BoxCollider:
@@ -542,8 +544,22 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.2, y: 0.1, z: 0.2}
+  m_Size: {x: 0.2, y: 0.075, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &461043881420936927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5858205113508239089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 505599121cd7c2d4d87a596056b0142b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Keys:
+  - {fileID: 11400000, guid: de152dbd63484024090338f2f3ee94ab, type: 2}
 --- !u!1 &7858576256475710053
 GameObject:
   m_ObjectHideFlags: 0
@@ -554,7 +570,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9075602683135573233}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: AttachPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

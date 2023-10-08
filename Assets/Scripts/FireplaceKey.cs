@@ -6,8 +6,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class FireplaceKey : MonoBehaviour
 {
-    private XRSlideable xrSlideable;
-    public XRSlideable XRSlideable { get => GetComponent<XRSlideable>();}
+    public XRSlideable XRSlideable { get => GetComponent<XRSlideable>(); }
     XRBaseInteractable XRBase { get => GetComponent<XRBaseInteractable>(); }
     XRInteractionManager XRManager { get => XRBase.interactionManager; }
 
@@ -30,12 +29,14 @@ public class FireplaceKey : MonoBehaviour
         onKeyPlaced += UpdateKeyState;
         onKeyEntered += UpdateKeyState;
     }
+
     private void OnDisable()
     {
         XRSlideable.onMovementCompleted -= UpdateKeyState;
         onKeyPlaced -= UpdateKeyState;
         onKeyEntered -= UpdateKeyState;
     }
+
     private void UpdateKeyState()
     {
         float delay = 0f;
@@ -63,11 +64,13 @@ public class FireplaceKey : MonoBehaviour
         StartCoroutine(SwitchInteractableDelay(keyBehaviour, delay));
         //Debug.Log(keyBehaviour.Method.Name);
     }
+
     private void SetKeyState(KeyObjectState keyState)
     {
         KeyState = keyState;
         //Debug.Log($"Key State: {KeyState}");
     }
+
     private void SwitchToGrabInteractable()
     {
         XRSlideable.enabled = false;
@@ -76,8 +79,13 @@ public class FireplaceKey : MonoBehaviour
         m_XRGrab.attachTransform = transform.GetChild(0);
         m_XRGrab.throwOnDetach = false;
         m_XRGrab.enabled = true;
+
+        var inventoryObject = gameObject.AddComponent<InventoryObject>();
+        inventoryObject.TextPos = new Vector3(0, 0.05f, 0);
+        inventoryObject.ItemName = "A strange looking Key";
         XRManager.SelectEnter(interactorSel, m_XRGrab);
     }
+
     private void SwitchToSimpleInteractable()
     {
         DestroyImmediate(XRBase);
@@ -93,6 +101,7 @@ public class FireplaceKey : MonoBehaviour
         XRBase.enabled = true;
         ToggleCollider(true);
     }
+
     void ToggleCollider(bool isOn)
     {
         var colliders = GetComponentsInChildren<SphereCollider>();
@@ -101,12 +110,14 @@ public class FireplaceKey : MonoBehaviour
             collider.enabled = isOn;
         }
     }
+
     private void DestroyBehaviours()
     {
         Destroy(XRBase);
         Destroy(XRSlideable);
         Destroy(this);
     }
+
     private IEnumerator SwitchInteractableDelay(KeyBehaviour keyBehaviour, float delay)
     {
         interactorSel = XRBase.interactorsSelecting[0];
@@ -117,6 +128,7 @@ public class FireplaceKey : MonoBehaviour
         XRBase.interactionLayers = ToggleInteractionLayer(XRBase.interactionLayers, true);
         keyBehaviour?.Invoke();
     }
+
     private InteractionLayerMask ToggleInteractionLayer(InteractionLayerMask layerMask, bool isOn)
     {
         int layer = isOn ? 2 : 30;

@@ -16,8 +16,8 @@ GameObject:
   - component: {fileID: 8600571273494766241}
   - component: {fileID: 4444016640436542988}
   - component: {fileID: 4137241343080186699}
-  m_Layer: 8
-  m_Name: Key
+  m_Layer: 0
+  m_Name: CabinetKey
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -298,7 +298,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemName: 
   itemType: 0
-  _textPos: {x: 0, y: 0, z: 0}
+  _textPos: {x: 0, y: 0.1, z: 0}
   _debugPos: {fileID: 0}
 --- !u!114 &4137241343080186699
 MonoBehaviour:

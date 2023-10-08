@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -23,24 +24,10 @@ public class RoomController : MonoBehaviour
     [SerializeField] private GameObject debugCanvas;
     MeshRenderer[] renderers;
 
-    public static RoomController Instance
-    {
-        get; set;
-    }
-
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this);
-        }
-        else
-        {
-            Instance = this;
-        }
-        DontDestroyOnLoad(Instance);
+        XROrigin = FindAnyObjectByType<XROrigin>().gameObject;
     }
-
     private void Start()
     {
         DisableRealtimeShadowsForStaticObjects();
@@ -54,7 +41,6 @@ public class RoomController : MonoBehaviour
         {
             SwitchOffLights();
         }
-
     }
 
     public void LoadLightOnProbes()
