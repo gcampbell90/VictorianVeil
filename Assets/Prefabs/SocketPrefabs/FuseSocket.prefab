@@ -66,7 +66,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2660699912937023854}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ccd0a1932c1e3064c86d7e3b213a867a, type: 3}
+  m_Script: {fileID: 11500000, guid: 51a8d91afa67f7a4dba1708caaab259d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_InteractionManager: {fileID: 0}
@@ -75,8 +75,8 @@ MonoBehaviour:
     m_Bits: 4294967295
   m_InteractionLayers:
     m_Bits: 4294967295
-  m_AttachTransform: {fileID: 0}
-  m_KeepSelectedTargetValid: 0
+  m_AttachTransform: {fileID: 8917439354699595883}
+  m_KeepSelectedTargetValid: 1
   m_DisableVisualsWhenBlockedInGroup: 1
   m_StartingSelectedInteractable: {fileID: 0}
   m_StartingTargetFilter: {fileID: 0}
@@ -112,6 +112,10 @@ MonoBehaviour:
   m_SocketActive: 1
   m_InteractableHoverScale: 1
   m_RecycleDelayTime: 1
+  m_Lock:
+    m_RequiredKeys:
+    - {fileID: 11400000, guid: 7746fd082fa590d4ea01cd76dfe6e464, type: 2}
+    - {fileID: 11400000, guid: 3e3828b5c7e4e4d4dab88361177c3d5d, type: 2}
 --- !u!1 &7375468487682471257
 GameObject:
   m_ObjectHideFlags: 0

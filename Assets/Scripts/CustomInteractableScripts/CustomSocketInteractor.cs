@@ -36,13 +36,15 @@ public class CustomSocketInteractor : XRSocketInteractor
         base.OnHoverEntered(args);
 
         args.interactableObject.transform.TryGetComponent(out InventoryObject inventoryObject);
+       
         inventoryObject.SocketEnter();
-    }
 
+    }
     /// <inheritdoc />
     public override bool CanHover(IXRHoverInteractable interactable)
     {
-        Debug.Log("Checking Item");
+        Debug.Log($"Checking CanHover Item for {gameObject.name}");
+
 
         if (!base.CanHover(interactable))
             return false;
@@ -51,11 +53,10 @@ public class CustomSocketInteractor : XRSocketInteractor
         var keyChain = interactable.transform.GetComponent<IKeychain>();
         return m_Lock.CanUnlock(keyChain);
     }
-
     /// <inheritdoc />
     public override bool CanSelect(IXRSelectInteractable interactable)
     {
-        Debug.Log("Checking Item");
+        Debug.Log($"Checking CanSelect Item for {gameObject.name}");
 
         if (!base.CanSelect(interactable))
             return false;

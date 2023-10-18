@@ -154,7 +154,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_InteractionLayers:
-    m_Bits: 1
+    m_Bits: 2
   m_DistanceCalculationMode: 1
   m_SelectMode: 0
   m_FocusMode: 1
@@ -299,6 +299,7 @@ MonoBehaviour:
   _itemName: 
   itemType: 0
   _textPos: {x: 0, y: 0.3, z: 0}
+  _setDebugPosition: 0
   _debugPos: {fileID: 0}
 --- !u!114 &4155605916196948384
 MonoBehaviour:

@@ -5,8 +5,8 @@ using InventorySystem;
 
 public class InventoryObject : BaseItem, IInventoryItem
 {
-    private InventoryController _inventoryController;
-    [Header("Debug Position")]
+    [Header("Debug Options")]
+    [SerializeField] private bool _setDebugPosition;
     [SerializeField] private Transform _debugPos;
 
     public event Action<InventoryObject> ItemPickedUp = delegate { };
@@ -17,9 +17,7 @@ public class InventoryObject : BaseItem, IInventoryItem
     public override void Awake()
     {
         base.Awake();
-        _inventoryController = GameManager.Instance.inventoryManager.InventoryController;
-
-        if (GameManager.Instance.GetDebugMode() && _debugPos != null)
+        if (GameManager.Instance.GetItemDebugMode() || !_setDebugPosition && _debugPos != null)
         {
             transform.position = _debugPos.position;
         }
@@ -40,7 +38,7 @@ public class InventoryObject : BaseItem, IInventoryItem
         base.SelectEntered(args);
         if (args.interactorObject.transform.name != "Direct Interactor") return;
 
-        _inventoryController.onShowItemText?.Invoke(this);
+        InventoryController.onShowItemText?.Invoke(this);
     }
 
     public override void SelectExited(SelectExitEventArgs args)
@@ -53,12 +51,20 @@ public class InventoryObject : BaseItem, IInventoryItem
         rb.isKinematic = true;
 
         Debug.Log($"SelectExited on {args.interactableObject.transform.name} called");
-        _inventoryController.onItemAddToInventory?.Invoke(gameObject);
+        InventoryController.onItemAddToInventory?.Invoke(gameObject);
     }
 
     public void SocketEnter()
     {
-        _inventoryController.onItemAddToSocket(this);
+        InventoryController.onItemAddToSocket(this);
+        BaseInteractable.interactionLayers = ToggleInteractionLayer(BaseInteractable.interactionLayers, false);
+    }
+
+    private InteractionLayerMask ToggleInteractionLayer(InteractionLayerMask layerMask, bool isOn)
+    {
+        int layer = isOn ? 1 : 2;
+        layerMask = (1 << layer);
+        return layerMask;
     }
 
     void OnDrawGizmos()

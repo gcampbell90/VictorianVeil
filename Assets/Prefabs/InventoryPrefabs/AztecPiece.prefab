@@ -524,6 +524,7 @@ MonoBehaviour:
   _itemName: 
   itemType: 0
   _textPos: {x: 0, y: 0.15, z: 0}
+  _setDebugPosition: 0
   _debugPos: {fileID: 0}
 --- !u!65 &7610120734667854476
 BoxCollider:

@@ -14,8 +14,7 @@ public class XRSlideable : MonoBehaviour
     [Serializable]
     public class ValueChangeEvent : UnityEvent<float> { }
 
-    [SerializeField]
-    private ValueChangeEvent m_OnValueChange;
+    [SerializeField]private ValueChangeEvent m_OnValueChange;
     public ValueChangeEvent onValueChange => m_OnValueChange;
 
     public delegate void MovementCompleted();
@@ -23,6 +22,7 @@ public class XRSlideable : MonoBehaviour
 
     [SerializeField] private Vector3 direction;
 
+    //Unity Methods
     private void Awake()
     {
         slideableItem = new SlideableItem()
@@ -34,16 +34,24 @@ public class XRSlideable : MonoBehaviour
             IsUnlocked = true
         };
     }
+    
     private void OnEnable()
     {
         slideableItem.interactable.selectEntered.AddListener((args) => HandleCheck(args, slideableItem));
     }
+    
     private void OnDisable()
     {
         slideableItem.interactable.selectEntered.RemoveListener((args) => HandleCheck(args, slideableItem));
     }
 
-    #region Interactions
+    private void OnDestroy()
+    {
+        Destroy(slideableItem.mover);
+        Destroy(slideableItem.interactable);
+    }
+    
+    //Member Methods
     private void HandleCheck(SelectEnterEventArgs args, SlideableItem slideableItem)
     {
         bool m_isOpen = slideableItem.IsUnlocked;
@@ -59,7 +67,8 @@ public class XRSlideable : MonoBehaviour
             Debug.Log("Locked Drawer");
         }
     }
-    IEnumerator TrackHandPos(SlideableItem slideableItem)
+    
+    private IEnumerator TrackHandPos(SlideableItem slideableItem)
     {
         //Debug.Log("Handle Tracking Enabled");
         while (slideableItem.interactable.isSelected)
@@ -69,6 +78,7 @@ public class XRSlideable : MonoBehaviour
         }
         //Debug.Log("Handle released");
     }
+   
     private void UpdatePos(SlideableItem slideableItem)
     {
         float percentageOpen = slideableItem.startPosPercentage + CalculateNormalisedPosDifference(slideableItem);
@@ -85,11 +95,13 @@ public class XRSlideable : MonoBehaviour
             Debug.Log($"{gameObject.name} onMovementCompleted Invoked");
         }
     }
+   
     private void MovementCompletedEventCall()
     {
         onMovementCompleted?.Invoke();
     }
-    float CalculateNormalisedPosDifference(SlideableItem slideableItem)
+    
+    private float CalculateNormalisedPosDifference(SlideableItem slideableItem)
     {
         Vector3 handPos = slideableItem.interactable.interactorsSelecting[0].transform.position;
         Vector3 pullDir = handPos - grabPos;
@@ -103,7 +115,6 @@ public class XRSlideable : MonoBehaviour
         //Debug.Log(pullDir);
         return Vector3.Dot(pullDir, targetDirection) / length;
     }
-    #endregion
 
     void OnDrawGizmos()
     {
@@ -134,9 +145,4 @@ public class XRSlideable : MonoBehaviour
         //Gizmos.DrawWireSphere(worldEndPos, 0.05f);
     }
 
-    private void OnDestroy()
-    {
-        Destroy(slideableItem.mover);
-        Destroy(slideableItem.interactable);
-    }
 }

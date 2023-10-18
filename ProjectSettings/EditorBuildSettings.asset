@@ -6,17 +6,29 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/XRRigScene.unity
+    path: Assets/Scenes/ManagerScene.unity
+    guid: 22483754705ccc94db4616c460bb3e21
+  - enabled: 1
+    path: Assets/Scenes/PlayerScene.unity
     guid: 85d6a48f0aaab0c47b3b71dbf6bdc959
   - enabled: 1
-    path: Assets/Scenes/InteractableItems.unity
-    guid: 2d91434b8fd1d4b4788173bef69116c9
+    path: Assets/Scenes/UIScene.unity
+    guid: 8481c7710c8fde345bb1dd93d3f260bd
   - enabled: 1
-    path: Assets/Scenes/Puzzles.unity
-    guid: 60c1a5c19b833fa49b3175f144daf861
+    path: Assets/Scenes/MenuScene.unity
+    guid: 1f6da43d9a8fd0340bd5fb2a104d87cc
+  - enabled: 1
+    path: Assets/Scenes/InventoryManagement.unity
+    guid: 6d522a0a09318ec4ba72715b78642d24
   - enabled: 1
     path: Assets/Scenes/VictorianRoom.unity
     guid: d36d70997ec68264a822910d9de20e7f
+  - enabled: 1
+    path: Assets/Scenes/Debug_InteractableItems.unity
+    guid: 2d91434b8fd1d4b4788173bef69116c9
+  - enabled: 1
+    path: Assets/Scenes/Debug_Puzzles.unity
+    guid: 60c1a5c19b833fa49b3175f144daf861
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: fc7a25e8ed0cc0a49ab2a36a3bc9aaa3,
       type: 2}

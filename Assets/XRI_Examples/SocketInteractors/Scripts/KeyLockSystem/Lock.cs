@@ -30,6 +30,8 @@ namespace UnityEngine.XR.Content.Interaction
         /// <returns>True if the supplied keychain has all the required keys; false otherwise.</returns>
         public bool CanUnlock(IKeychain keychain)
         {
+            bool isInKeyChain = false;
+
             if (keychain == null)
                 return m_RequiredKeys.Count == 0;
 
@@ -39,10 +41,17 @@ namespace UnityEngine.XR.Content.Interaction
                     continue;
 
                 if (!keychain.Contains(requiredKey))
-                    return false;
+                {
+                    isInKeyChain = false;
+                }
+                else
+                {
+                    isInKeyChain = true;
+                    break;
+                }   
             }
 
-            return true;
+            return isInKeyChain;
         }
     }
 }
