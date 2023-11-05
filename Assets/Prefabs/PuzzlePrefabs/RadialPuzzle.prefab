@@ -208,7 +208,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 126
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &8413016540621503267
 Transform:
@@ -941,7 +941,7 @@ Transform:
   m_GameObject: {fileID: 5568502189058573700}
   serializedVersion: 2
   m_LocalRotation: {x: 0.0019119178, y: 0.9999973, z: -0.00006119201, w: -0.0013058773}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.063, y: -0, z: -0}
   m_LocalScale: {x: 0.61109, y: 0.61109, z: 0.61109}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1146,7 +1146,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51a0656c5f8cfdc4dac51ac4e4f0dbd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <DebugMode>k__BackingField: 0
   radialPiece: {fileID: 7287911217686530349}
+  _keySocket: {fileID: 8051865386232447497}
   wx_route:
   - {fileID: 7194208004239121872}
   - {fileID: 1762551566258323658}
@@ -1183,10 +1185,10 @@ MonoBehaviour:
     - {x: -0.25, y: 0, z: 0}
     - {x: -0.5, y: 0, z: 0}
     - {x: -0.8, y: 0, z: 0}
-  puzzlePiece1: {fileID: 6267415328450717822}
-  puzzlePiece2: {fileID: 6659381234439317916}
-  puzzlePiece3: {fileID: 710138522253702807}
-  puzzlePiece4: {fileID: 1872268494055845855}
+  _puzzlePiece1: {fileID: 6070874619278832202}
+  _puzzlePiece2: {fileID: 4178072499964004425}
+  _puzzlePiece3: {fileID: 3031621998228176481}
+  _puzzlePiece4: {fileID: 6273693182277515230}
 --- !u!114 &6428090625904748802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1201,7 +1203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_InteractionManager: {fileID: 0}
   m_Colliders:
-  - {fileID: 6710837610057565327}
+  - {fileID: 3886662588773640146}
   m_InteractionLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -1372,8 +1374,8 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 126
-  m_IsActive: 1
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
 --- !u!4 &3491001427268549924
 Transform:
   m_ObjectHideFlags: 0
@@ -1382,14 +1384,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5943928714393740181}
   serializedVersion: 2
-  m_LocalRotation: {x: -1.0186341e-10, y: 0.00000017881393, z: -0.0003452955, w: 1}
+  m_LocalRotation: {x: 0.99999994, y: 0.00034904052, z: -0, w: 0}
   m_LocalPosition: {x: 0, y: -0.064, z: 0}
   m_LocalScale: {x: 0.6397654, y: 0.017110307, z: 0.6397654}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8413016540621503267}
   m_Father: {fileID: 7287911217686530349}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 180, y: 0, z: -0.04}
 --- !u!33 &8386730740204785790
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1480,7 +1482,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_InteractionLayers:
-    m_Bits: 4
+    m_Bits: 6
   m_AttachTransform: {fileID: 0}
   m_KeepSelectedTargetValid: 1
   m_DisableVisualsWhenBlockedInGroup: 1
@@ -1798,7 +1800,7 @@ Transform:
   m_GameObject: {fileID: 7821395983250024419}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0}
+  m_LocalPosition: {x: 0, y: 0.001, z: -0}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3665,7 +3667,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 8d8b364710e7d894dbb7ff0826563341,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 180
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8d8b364710e7d894dbb7ff0826563341,
         type: 3}
@@ -3723,7 +3725,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d8b364710e7d894dbb7ff0826563341,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6710837610057565327}
+      addedObject: {fileID: 3886662588773640146}
   m_SourcePrefab: {fileID: 100100000, guid: 8d8b364710e7d894dbb7ff0826563341, type: 3}
 --- !u!4 &7287911217686530349 stripped
 Transform:
@@ -3764,8 +3766,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!64 &6710837610057565327
-MeshCollider:
+--- !u!65 &3886662588773640146
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -3782,7 +3784,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 2534964839176971238, guid: 8d8b364710e7d894dbb7ff0826563341, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 1.0000001, y: 0.10000007, z: 1.0000001}
+  m_Center: {x: -0.00000002980233, y: 0, z: 0}

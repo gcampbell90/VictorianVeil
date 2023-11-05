@@ -11,21 +11,14 @@ public class CustomSocketInteractor : XRSocketInteractor
     [Tooltip("The required keyobject to interact with this socket.")]
     Lock m_Lock;
 
-    /// <summary>
-    /// The required keys to interact with this socket.
-    /// </summary>
-    public Lock keychainLock
-    {
-        get => m_Lock;
-        set => m_Lock = value;
-    }
-
     public delegate void SocketHandler(InventoryObject inventoryObject);
 
     //This event will forcefully detach the correct inventory item from the interactor to enter the socket
     protected override void OnHoverEntered(HoverEnterEventArgs args)
     {
-        Debug.Log("Checking Item");
+        
+        Debug.Log("Checking Item ");
+
         if (!CanHover(args.interactableObject))
         {
             Debug.Log("Not a valid Item");
@@ -35,33 +28,42 @@ public class CustomSocketInteractor : XRSocketInteractor
 
         base.OnHoverEntered(args);
 
-        args.interactableObject.transform.TryGetComponent(out InventoryObject inventoryObject);
-       
-        inventoryObject.SocketEnter();
+        bool isInventory = args.interactableObject.transform.TryGetComponent(out InventoryObject inventoryObject);
 
+        if(isInventory && !hasSelection)
+        {
+            inventoryObject.SocketEnter();
+
+        }
+        else
+        {
+            return;
+        }
     }
+
     /// <inheritdoc />
     public override bool CanHover(IXRHoverInteractable interactable)
     {
-        Debug.Log($"Checking CanHover Item for {gameObject.name}");
+        //Debug.Log($"Checking CanHovekr Item for {gameObject.name}");
 
 
         if (!base.CanHover(interactable))
             return false;
-        Debug.Log("Checking Key");
+        //Debug.Log("Checking Key");
 
         var keyChain = interactable.transform.GetComponent<IKeychain>();
         return m_Lock.CanUnlock(keyChain);
     }
+
     /// <inheritdoc />
     public override bool CanSelect(IXRSelectInteractable interactable)
     {
-        Debug.Log($"Checking CanSelect Item for {gameObject.name}");
+        //Debug.Log($"Checking CanSelect Item for {gameObject.name}");
 
         if (!base.CanSelect(interactable))
             return false;
 
-        Debug.Log("Checking Key");
+        //Debug.Log("Checking Key");
 
         var keyChain = interactable.transform.GetComponent<IKeychain>();
         return m_Lock.CanUnlock(keyChain);

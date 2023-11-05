@@ -17,7 +17,7 @@ public class InventoryObject : BaseItem, IInventoryItem
     public override void Awake()
     {
         base.Awake();
-        if (GameManager.Instance.GetItemDebugMode() || !_setDebugPosition && _debugPos != null)
+        if (GameManager.Instance.GetItemDebugMode() || _setDebugPosition && (_debugPos !=null))
         {
             transform.position = _debugPos.position;
         }

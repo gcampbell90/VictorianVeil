@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class PuzzlePiece : MonoBehaviour
 {
@@ -138,5 +139,14 @@ public class PuzzlePiece : MonoBehaviour
             RadialPuzzleController.checkIfCompleted();
 
         }
+    }
+
+    private void OnDestroy()
+    {
+        Destroy(GetComponent<WaypointInteractable>());
+        Destroy(GetComponent<XRBaseInteractable>());
+        Destroy(GetComponent<PhysicsMover>());
+        Destroy(GetComponent<Rigidbody>());
+        Destroy(GetComponent<CapsuleCollider>());
     }
 }

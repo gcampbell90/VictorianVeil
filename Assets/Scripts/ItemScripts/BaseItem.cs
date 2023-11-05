@@ -9,9 +9,6 @@ public abstract class BaseItem : MonoBehaviour
     public XRBaseInteractable BaseInteractable { get; private set; }
     private Rigidbody _rb;
 
-    public enum ItemType { key, other };
-    public ItemType itemType;
-
     public Vector3 TextPos { get => _textPos; set => _textPos = value; }
     [SerializeField] private Vector3 _textPos;
 

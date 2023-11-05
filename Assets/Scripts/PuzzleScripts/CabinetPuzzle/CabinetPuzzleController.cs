@@ -12,9 +12,6 @@ public class CabinetPuzzleController : BasePuzzle
     private XRBaseInteractable cabinethandleInteractable;
     private new HingeJoint hingeJoint;
 
-    [Header("Debug Options")]
-    [SerializeField] bool isUnlocked;
-
     float closedRot = -0.1f;
     float openRot = -180f;
 
@@ -22,8 +19,8 @@ public class CabinetPuzzleController : BasePuzzle
     protected override void Awake()
     {
         base.Awake();
-        cabinethandleInteractable = interactableDoor.GetComponent<XRBaseInteractable>();
 
+        cabinethandleInteractable = interactableDoor.GetComponent<XRBaseInteractable>();
         hingeJoint = interactableDoor.GetComponent<HingeJoint>();
 
         UpdateHingeJoint(closedRot);
@@ -37,7 +34,7 @@ public class CabinetPuzzleController : BasePuzzle
     protected override void Start()
     {
         base.Start();
-        if (DebugMode || isUnlocked)
+        if (DebugMode)
         {
             UnlockDoor();
         }
@@ -67,6 +64,5 @@ public class CabinetPuzzleController : BasePuzzle
         limits.max = 0;
         hingeJoint.limits = limits;
     }
-
 
 }

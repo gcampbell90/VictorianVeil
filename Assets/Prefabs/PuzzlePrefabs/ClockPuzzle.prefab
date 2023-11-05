@@ -300,6 +300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c73ab6749435da944a76f44f77d58156, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <DebugMode>k__BackingField: 0
   _squareSocket: {fileID: 8475607810991062151}
   _cogDrawer: {fileID: 6697621814071375147}
   _coinDrawer: {fileID: 1372633184743974347}
@@ -443,7 +444,7 @@ PrefabInstance:
     - target: {fileID: 8164705571879959090, guid: 69bcbe8a3c723a8459bad61946074109,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.049999893
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 8164705571879959090, guid: 69bcbe8a3c723a8459bad61946074109,
         type: 3}
@@ -453,7 +454,7 @@ PrefabInstance:
     - target: {fileID: 8164705571879959090, guid: 69bcbe8a3c723a8459bad61946074109,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.73
+      value: -0.909
       objectReference: {fileID: 0}
     - target: {fileID: 8164705571879959090, guid: 69bcbe8a3c723a8459bad61946074109,
         type: 3}

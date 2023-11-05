@@ -65,7 +65,6 @@ public class FireplaceController : BasePuzzle
         aztecCircleSocket = circleSocketGO.GetComponent<XRSocketInteractor>();
         keySocket = keySocketGO.GetComponent<XRSocketInteractor>();
         keyHoleSlider = keyHoleSocketCoverGO.GetComponent<XRSlideable>();
-
     }
 
 
@@ -224,7 +223,7 @@ public class FireplaceController : BasePuzzle
 
     private InteractionLayerMask ToggleInteractionLayer(InteractionLayerMask layerMask, bool isOn)
     {
-        int layer = isOn ? 2 : 30;
+        int layer = isOn ? 1 : 2;
         layerMask = 1 << layer;
         return layerMask;
     }

@@ -2,9 +2,10 @@
 
 public abstract class BasePuzzle : MonoBehaviour, IPuzzle
 {
-    public bool DebugMode { get; private set; }
+    [field: SerializeField]public bool DebugMode { get; private set; }
     protected virtual void Awake()
     {
+        if (DebugMode != GameManager.Instance.DebugMode) return; //Should be false on start, unless enabled by dev
         DebugMode = GameManager.Instance.GetPuzzleDebugMode();
     }
 

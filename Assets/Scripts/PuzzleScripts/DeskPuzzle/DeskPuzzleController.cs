@@ -8,9 +8,6 @@ public class DeskPuzzleController : BasePuzzle
     [SerializeField] private List<XRSlideable> moveableDrawers = new List<XRSlideable>();
     bool drawer3Open, drawer2Open;
 
-    [Header("Debug Options")]
-    [SerializeField] bool isUnlocked;
-
     //Unity Events
     protected override void Awake()
     {
@@ -26,7 +23,7 @@ public class DeskPuzzleController : BasePuzzle
     protected override void Start()
     {
         base.Start();
-        if (DebugMode || isUnlocked)
+        if (DebugMode)
         {
             UnlockDeskSideDrawer();
             UnlockDeskCenterDrawer();

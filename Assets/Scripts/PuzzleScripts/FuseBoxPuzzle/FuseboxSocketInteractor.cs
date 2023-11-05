@@ -27,6 +27,7 @@ public class FuseboxSocketInteractor : XRSocketInteractor
 
         inventoryObject.SocketEnter();
     }
+
     public override bool CanHover(IXRHoverInteractable interactable)
     {
         Debug.Log($"Checking CanHover Item for {gameObject.name}");
@@ -38,6 +39,7 @@ public class FuseboxSocketInteractor : XRSocketInteractor
         var keyChain = interactable.transform.GetComponent<IKeychain>();
         return m_Lock.CanUnlock(keyChain);
     }
+
     /// <inheritdoc />
     public override bool CanSelect(IXRSelectInteractable interactable)
     {

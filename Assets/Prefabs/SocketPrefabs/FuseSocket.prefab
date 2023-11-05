@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9066687616222883668}
   - component: {fileID: 4569978919282491463}
-  - component: {fileID: 1489118369662024034}
+  - component: {fileID: 145235714351907569}
   m_Layer: 0
   m_Name: FuseSocket
   m_TagString: Untagged
@@ -57,7 +57,7 @@ CapsuleCollider:
   m_Height: 0.4
   m_Direction: 0
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1489118369662024034
+--- !u!114 &145235714351907569
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2660699912937023854}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 51a8d91afa67f7a4dba1708caaab259d, type: 3}
+  m_Script: {fileID: 11500000, guid: 17bd462f15f727d4db504b293f4e92df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_InteractionManager: {fileID: 0}

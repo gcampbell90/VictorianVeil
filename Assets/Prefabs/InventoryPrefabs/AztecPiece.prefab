@@ -226,7 +226,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_InteractionLayers:
-    m_Bits: 4
+    m_Bits: 6
   m_DistanceCalculationMode: 1
   m_SelectMode: 0
   m_FocusMode: 1
@@ -316,7 +316,7 @@ MonoBehaviour:
   m_MaxAngle: 90
   m_MinAngle: -90
   m_AngleIncrement: 0
-  m_PositionTrackedRadius: 0.1
+  m_PositionTrackedRadius: 0.05
   m_TwistSensitivity: 1
   m_OnValueChange:
     m_PersistentCalls:

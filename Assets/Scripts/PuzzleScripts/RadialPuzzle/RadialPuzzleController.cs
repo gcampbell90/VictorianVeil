@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Content.Interaction;
+using UnityEngine.XR.Interaction.Toolkit;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -11,8 +12,11 @@ public class RadialPuzzleController : BasePuzzle
 {
     [SerializeField] private Transform radialPiece;
     XRKnob xRKnob;
+    [SerializeField] private XRSocketInteractor _keySocket;
+
     [Header("PiecePlaces")]
     [SerializeField] private NodeObject[] wx_route;
+
     public Node[] WX_Route { get; set; } = new Node[4];
 
     [SerializeField] private NodeObject[] yz_route;
@@ -28,10 +32,11 @@ public class RadialPuzzleController : BasePuzzle
     [Header("Red")]
     public RouteData routeB;
 
-    [SerializeField] private Transform puzzlePiece1;
-    [SerializeField] private Transform puzzlePiece2;
-    [SerializeField] private Transform puzzlePiece3;
-    [SerializeField] private Transform puzzlePiece4;
+    [SerializeField] private PuzzlePiece _puzzlePiece1;
+    [SerializeField] private PuzzlePiece _puzzlePiece2;
+    [SerializeField] private PuzzlePiece _puzzlePiece3;
+    [SerializeField] private PuzzlePiece _puzzlePiece4;
+
 
     //Events
     public delegate RouteData GetRouteData(string name);
@@ -48,13 +53,14 @@ public class RadialPuzzleController : BasePuzzle
 
     public delegate void CheckIfCompleted();
     public static CheckIfCompleted checkIfCompleted;
-
+    
     //Unity Methods
     protected override void Awake()
     {
         base.Awake();
 
         xRKnob = GetComponent<XRKnob>();
+        _keySocket.enabled = false;
 
         WX_Route = SetStaticRoute(route: wx_route);
         YZ_Route = SetStaticRoute(route: yz_route);
@@ -260,11 +266,7 @@ public class RadialPuzzleController : BasePuzzle
 
     private void AllPieceSet()
     {
-        var piece1Component = puzzlePiece1.GetComponent<PuzzlePiece>();
-        var piece2Component = puzzlePiece2.GetComponent<PuzzlePiece>();
-        var piece3Component = puzzlePiece3.GetComponent<PuzzlePiece>();
-        var piece4Component = puzzlePiece4.GetComponent<PuzzlePiece>();
-        if (piece1Component.IsSet == true && piece2Component.IsSet == true && piece3Component.IsSet == true && piece4Component.IsSet == true)
+        if (_puzzlePiece1.IsSet == true && _puzzlePiece2.IsSet == true && _puzzlePiece3.IsSet == true && _puzzlePiece4.IsSet == true)
         {
             CompletePuzzle();
         }
@@ -273,14 +275,66 @@ public class RadialPuzzleController : BasePuzzle
     private new void CompletePuzzle()
     {
         base.CompletePuzzle();
+
+        RevealSocket();
+        DisableRadialPuzzle();
+    }
+
+    private void DisableRadialPuzzle()
+    {
+        Destroy(GetComponent<XRKnob>());
+        Destroy(_puzzlePiece1);
+        Destroy(_puzzlePiece2);
+        Destroy(_puzzlePiece3);
+        Destroy(_puzzlePiece4);
+
+        foreach (var item in wx_route)
+        {
+            Destroy(item.gameObject);
+        }
+        foreach (var item in yz_route)
+        {
+            Destroy(item.gameObject);
+        }
+        foreach (var item in northRoute)
+        {
+            Destroy(item.gameObject);
+        }
+        foreach (var item in southRoute)
+        {
+            Destroy(item.gameObject);
+        }
+
+        //Destroy(this);
+    }
+
+    private void RevealSocket()
+    {
+        StartCoroutine(RotateRadialPiece());
+        _keySocket.gameObject.SetActive(true);
+        _keySocket.enabled = true;
+    }
+
+    private IEnumerator RotateRadialPiece()
+    {
+        float t = 0f;
+        float dur = 1f;
+        var rotationTarget = new Vector3(180f, 0f, 0f);
+        while(t < 1)
+        {
+            radialPiece.transform.rotation = Quaternion.Lerp(Quaternion.identity, Quaternion.Euler(rotationTarget), t);
+            t += Time.deltaTime / dur; 
+            yield return null;
+        }
     }
 
     private void OnDrawGizmos()
     {
-        Handles.Label(puzzlePiece1.transform.position, $"{puzzlePiece1.GetComponent<PuzzlePiece>().pieceLabel} Piece");
-        Handles.Label(puzzlePiece2.transform.position, $"{puzzlePiece2.GetComponent<PuzzlePiece>().pieceLabel} Piece");
-        Handles.Label(puzzlePiece3.transform.position, $"{puzzlePiece3.GetComponent<PuzzlePiece>().pieceLabel} Piece");
-        Handles.Label(puzzlePiece4.transform.position, $"{puzzlePiece4.GetComponent<PuzzlePiece>().pieceLabel} Piece");
+        if (_puzzlePiece1 == null) return;
+        Handles.Label(_puzzlePiece1.transform.position, $"{_puzzlePiece1.pieceLabel} Piece");
+        Handles.Label(_puzzlePiece2.transform.position, $"{_puzzlePiece2.pieceLabel} Piece");
+        Handles.Label(_puzzlePiece3.transform.position, $"{_puzzlePiece3.pieceLabel} Piece");
+        Handles.Label(_puzzlePiece4.transform.position, $"{_puzzlePiece4.pieceLabel} Piece");
 
         //RouteA
         Gizmos.color = Color.blue;
